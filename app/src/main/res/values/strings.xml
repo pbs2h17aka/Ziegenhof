@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Ziegenhof</string>
+    <string name="button_daten_erfassen">Daten erfassen</string>
+    <string name="button_daten_anzeigen">Daten anzeigen</string>
+    <string name="button_daten_uebertragen">Daten übertragen</string>
+    <string name="button_ok">OK</string>
+    <string name="button_daten_senden">Daten senden</string>
+    <string name="button_daten_empfangen">Ziegennamen lesen</string>
 </resources>
