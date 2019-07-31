@@ -55,6 +55,47 @@ public class ZiegenDB extends SQLiteOpenHelper {
 
     // ---------------------------------------------------------------------------------
 
+    // Methode um Ziegen Namen abzufragen
+    public ArrayList<String> getZiegenListe() {
+
+        // Cursor deklarieren
+        Cursor cursor = null;
+
+        // SQL Query erstellen
+        String sql = "SELECT * FROM ziegen ORDER BY name desc";
+
+        try{
+            // Cursor auf Datensatz setzen
+            cursor = db.rawQuery(sql, null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG,"Fehler beim Lesen der Datenbank: " + e.getMessage());
+        }
+
+        // Erstellen einer Namensliste
+        ArrayList<String> liste = new ArrayList<>();
+        liste.add("Alle");
+
+        // Wennn der Cursor auf einem Dazensatz liegt
+        if(cursor != null) {
+            // Log der Anzahl von Datensätzen im Cursor
+            Log.v(LOG_TAG,"Cursor.count = " + cursor.getCount());
+            // Cursor auf den ersten Datensatz setzen
+            cursor.moveToFirst();
+            // Durchlauf aller Datensätze des Cursors
+            while(! cursor.isAfterLast()) {
+                // Hinzufügen des aktuellen Ertrags zur Liste
+                liste.add(cursor.getString(0));
+                // Cursor auf nächste Zeile setzen
+                cursor.moveToNext();
+            }
+            // Cursor schließen
+            cursor.close();
+        }
+        return liste;
+    }
+
+    // ---------------------------------------------------------------------------------
+
     // Methode um neuen Ertrag in SQLite Datenbank zu schreiben
     public void addErtrag(Ertrag ertrag) {
 
@@ -77,10 +118,10 @@ public class ZiegenDB extends SQLiteOpenHelper {
     // Methode um Erträge abzufragen
     public ArrayList<Ertrag> getErtragListe(String name) {
 
-        // Erstellen eines Cursors
+        // Cursor deklarieren
         Cursor cursor = null;
 
-        // Erstellen der SQL Query
+        // SQL Query erstellen
         String query;
         if(name.toLowerCase().equals("alle")) {
             query = "SELECT * FROM ertraege";
@@ -102,7 +143,7 @@ public class ZiegenDB extends SQLiteOpenHelper {
         if(cursor != null) {
             // Log der Anzahl von Datensätzen im Cursor
             Log.v(LOG_TAG,"Cursor.count = " + cursor.getCount());
-            // Curosr auf ersteb Datensatz setzen
+            // Curosr auf ersten Datensatz setzen
             cursor.moveToFirst();
             // Durchlauf aller Datensätze des Cursors
             while(!cursor.isAfterLast()) {
@@ -125,6 +166,29 @@ public class ZiegenDB extends SQLiteOpenHelper {
             cursor.close();
         }
         return liste;
+    }
+
+    // ---------------------------------------------------------------------------------
+
+    // Methode um Ziegen Namen in Datenbank zu schreiben
+    public void uebertrageZiegenNamen(ArrayList<String> liste) {
+
+        // Löschen der alten Daten
+        try{
+            db.delete("ziegen",null,null);
+        } catch (Exception e) {
+            Log.e(LOG_TAG, "Fehler beim Löschen der Tabelle 'ziegen': " + e.getMessage());
+        }
+
+        // Einfügen der neuen Daten
+        for(String name : liste) {
+            String sql = "INSERT INTO ziegen(name) VALUES('" + name + "')";
+            try {
+                db.execSQL(sql);
+            } catch(Exception e) {
+                Log.e(LOG_TAG,"INSERT: " + e.getMessage() );
+            }
+        }
     }
 
     // ---------------------------------------------------------------------------------

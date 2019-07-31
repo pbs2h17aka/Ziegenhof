@@ -39,8 +39,8 @@ public class DatenErfassen extends AppCompatActivity {
         et_ertrag = findViewById(R.id.editTextErtrag);
         bt_ok = findViewById(R.id.buttonOK);
 
-        // Testdaten
-        String[] ziegenNamen = {"Lotte", "Frieda", "Esmeralda", "Gudrun", "Elfriede"};
+        // Ziegen Namen in Spinner einbinden
+        ArrayList<String> ziegenNamen = ErtragManager.getZiegen(getApplicationContext());
         ArrayAdapter adapterZiegenNamen = new ArrayAdapter(this, R.layout.support_simple_spinner_dropdown_item, ziegenNamen);
         spin_namen.setAdapter(adapterZiegenNamen);
     }
