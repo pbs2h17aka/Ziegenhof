@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import static com.bib.pbs2h17aka.ziegenhof.R.mipmap.ic_launcher_round;
+
 // Main Activity
 public class Ziegenhof extends AppCompatActivity {
 
