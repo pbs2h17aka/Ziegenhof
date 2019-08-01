@@ -73,4 +73,12 @@ public class ErtragManager {
 
     // ---------------------------------------------------------------------------------
 
+    // Methode um alle Ertraege an den Server zu senden
+    public static void sendeErtragListe(Context context, String ip, int port) throws IOException {
+
+        // Abfrage der Erträge aus SQLite Datenbank
+        ArrayList<Ertrag> liste = getErtragLise(context, "Alle");
+        // Datensätze an Server senden
+        Netzwerk.sendeErtragListe(liste, ip, port);
+    }
 }

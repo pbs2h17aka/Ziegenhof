@@ -73,4 +73,44 @@ public class Netzwerk {
     }
 
     // ---------------------------------------------------------------------------------
+
+    // Methode um Erträge an Server zu senden
+    public static void sendeErtragListe(ArrayList<Ertrag> liste, String ip, int port) throws IOException {
+
+        // Socket deklarieren
+        Socket so = new Socket();
+
+        try {
+            // Socket mit dem Server verbinden
+            so.connect(new InetSocketAddress(InetAddress.getByName(ip),port),1000);
+        } catch(Exception e){
+            Log.e(LOG_TAG,"Gerät nicht erreichbar: " + e.getMessage());
+            throw new IOException("Gerät nicht erreichbar:\n" + e.getMessage());
+        }
+
+        // Wenn Client erfolgreich mit Server verbunden ist
+        Log.v(LOG_TAG, String.format("Client: erfolgreich verbunden mit Server auf %s:%d", so.getInetAddress(),so.getPort()));
+
+        // Daten an den Server übertragen
+        try(
+            BufferedReader in = new BufferedReader(new InputStreamReader(so.getInputStream()));
+            PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(so.getOutputStream())));
+        ) {
+            // Auf dem Server Socket für Datenempfang informieren
+            out.println("PUT DATA");
+            out.flush();
+            // Schreiben aller Datensätze in den Output Stream
+            for(Ertrag e : liste) {
+                out.println(String.format("%s,%s,$d", e.getName(), e.getDatum(),e.getLiter()));
+            }
+            // Senden des Streams
+            out.flush();
+        } catch(Exception e) {
+            Log.e(LOG_TAG, "Netzwerkfehler: " + e.getMessage());
+            throw new IOException("Netzwerkfehler:\n" + e.getMessage());
+        }
+
+        // Socket schließen
+        try {so.close();} catch(Exception e) {}
+    }
 }

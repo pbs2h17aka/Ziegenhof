@@ -73,7 +73,7 @@ public class ZiegenDB extends SQLiteOpenHelper {
 
         // Erstellen einer Namensliste
         ArrayList<String> liste = new ArrayList<>();
-        liste.add("Alle");
+        //liste.add("Alle");
 
         // Wennn der Cursor auf einem Dazensatz liegt
         if(cursor != null) {
